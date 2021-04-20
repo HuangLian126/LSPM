@@ -1,7 +1,7 @@
 # LSPM
-This is the implement of Infrared Small Target Segmentation with Multi-scale Feature Representation.
+This is the implement of Infrared Small Target Segmentation with Multiscale Feature Representation.
 
-Pleaes note that we will release the OurModel.py after the article is accepted. 
+Our article will be published on Infrared Physics & Technology. 
 
 If you have any questions, please contact this Email: hlcqsxxy@163.com.
 
