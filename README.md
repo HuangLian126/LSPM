@@ -1,8 +1,6 @@
 # LSPM
 This repository is the implement of Infrared Small Target Segmentation with Multiscale Feature Representation. This implement is built on Ubuntu18.04 with Pytorch 1.1. The windows system may be compatible.
 
-Our article will be published on Infrared Physics & Technology.
-
 If you have any questions, please contact this Email: hlcqsxxy@163.com.
 
 Copyright: School of Communication and Information Engineering, Chongqing University of Posts and Telecommunications (CQUPT)
