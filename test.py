@@ -3,7 +3,7 @@ import torch.nn.functional as F
 import numpy as np
 import cv2
 from scipy import misc
-from ourModels import VGG
+from ourModels import model_VGG
 from torch.autograd import Variable
 from data import get_loader_test
 
@@ -12,10 +12,8 @@ parser.add_argument('--testsize', type=int, default=352, help='testing size')
 
 opt = parser.parse_args()
 
-dataset_path = 'path/'
-
-model = VGG()
-model.load_state_dict(torch.load('/model path'))
+model = model_VGG()
+model.load_state_dict(torch.load('/model path/'))
 
 model.cuda()
 model.eval()
@@ -57,29 +55,17 @@ with torch.no_grad():
         gt = np.asarray(gt, np.float32)
         gt /= (gt.max() + 1e-8)
         image = image.cuda()
-
         res = model(image)
-
         res2 = res.sigmoid()
-
         res2 = F.interpolate(res2, size=(gts.shape[2], gts.shape[3]), mode='bilinear', align_corners=False)
-
         res1 = res.sigmoid().data.cpu().numpy().squeeze()
-
         imo = cv2.resize(res1, (gts.shape[3], gts.shape[2]))
-
-
         misc.imsave(save_path + name[0], imo)
-
         minVar = torch.zeros_like(gts)
         maxVar = torch.ones_like(gts)
-
 
         train_F1 = calculateF1Measure(res2.cpu().numpy(), gts.cpu().numpy(), 0.7)
         sum_val_F1 += train_F1
 
-
     avg_val_F1_g1 = sum_val_F1 / 100
-
-
-    print("==========F1 measure is %f" % (avg_val_F1_g1))
+    print("==========F1 measure is %0.4f" % (avg_val_F1_g1))
