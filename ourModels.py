@@ -65,9 +65,9 @@ class LSPM(Module):
         out = self.conv(out)
         return out
 
-class aggregation_OWN(nn.Module):
+class FAMCA(nn.Module):
     def __init__(self, in_channels, out_channels):
-        super(aggregation_OWN, self).__init__()
+        super(FAMCA, self).__init__()
 
         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=1, bias=False)
         self.relu = nn.ReLU(inplace=True)
@@ -100,9 +100,9 @@ class aggregation_OWN(nn.Module):
 
         return out
 
-class aggregation_OWN_Single(nn.Module):
+class FAMCA_Single(nn.Module):
     def __init__(self, channels):
-        super(aggregation_OWN_Single, self).__init__()
+        super(FAMCA_Single, self).__init__()
 
         self.conv = nn.Conv2d(channels, channels, kernel_size=1, bias=False)
         self.relu = nn.ReLU(inplace=True)
@@ -138,10 +138,10 @@ class model_VGG(nn.Module):
 
         self.lspm = LSPM(512)
 
-        self.aggregation_4 = aggregation_OWN(512, 512)
-        self.aggregation_3 = aggregation_OWN(512, 256)
-        self.aggregation_2 = aggregation_OWN(256, 128)
-        self.aggregation_1 = aggregation_OWN_Single(128)
+        self.aggregation_4 = FAMCA(512, 512)
+        self.aggregation_3 = FAMCA(512, 256)
+        self.aggregation_2 = FAMCA(256, 128)
+        self.aggregation_1 = FAMCA_Single(128)
 
         self.out_planes = [512, 256, 128]
         infos = []
