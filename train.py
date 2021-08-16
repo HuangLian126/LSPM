@@ -54,7 +54,7 @@ if __name__ == '__main__':
             if i % 200 == 0 or i == total_step:
                 print('Epoch [{:03d}/{:03d}], Step [{:04d}/{:04d}], Loss: {:0.4f}'.format(epoch, opt.epoch, i, total_step, loss.data))
 
-        save_path_pth = 'E:/LSPM-master/z2/'
+        save_path_pth = '/path/'
 
         if (epoch) % 1 == 0:
             torch.save(model.state_dict(), save_path_pth + 'LSPM-' + '%d' % epoch + '.pth')
