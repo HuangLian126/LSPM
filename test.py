@@ -2,7 +2,7 @@ import torch, os, argparse
 import torch.nn.functional as F
 import numpy as np
 import cv2
-from scipy import misc
+
 from ourModels import model_VGG
 from torch.autograd import Variable
 from data import get_loader_test
@@ -21,8 +21,6 @@ if __name__ == '__main__':
     model.cuda()
     model.eval()
 
-    CE = torch.nn.BCEWithLogitsLoss()
-
     def calculateF1Measure(output_image,gt_image,thre):
         output_image = np.squeeze(output_image)
         gt_image     = np.squeeze(gt_image)
@@ -34,14 +32,11 @@ if __name__ == '__main__':
         F1           = 2*recall*prec/np.maximum(0.001, recall+prec)
         return F1
 
-
     with torch.no_grad():
 
-        sum_val_false_ratio = 0
-        sum_val_detect_ratio = 0
-        sum_val_F1 = 0
+        sum_test_FM = 0
 
-        save_path = '/path/'
+        img_save_path = '/path/'
 
         if not os.path.exists(save_path):
             os.makedirs(save_path)
@@ -53,22 +48,18 @@ if __name__ == '__main__':
 
         for i, data in enumerate(test_loader):
             image, gt, name = data
-            gts = Variable(gt)
-            gts = gts.cuda()
-            gt = np.asarray(gt, np.float32)
-            gt /= (gt.max() + 1e-8)
+         
+            gt[gt > 0.5] = 1
+            gt[gt != 1] = 0
+     
             image = image.cuda()
             res = model(image)
-            res2 = res.sigmoid()
-            res2 = F.interpolate(res2, size=(gts.shape[2], gts.shape[3]), mode='bilinear', align_corners=False)
-            res1 = res.sigmoid().data.cpu().numpy().squeeze()
-            imo = cv2.resize(res1, (gts.shape[3], gts.shape[2]))
-            misc.imsave(save_path + name[0], imo)
-            minVar = torch.zeros_like(gts)
-            maxVar = torch.ones_like(gts)
+            
+            img = img.sigmoid().data.cpu().numpy().squeeze()
+            cv2.imwrite(img_save_path + name[0], 255*img)
 
-            train_F1 = calculateF1Measure(res2.cpu().numpy(), gts.cpu().numpy(), 0.7)
-            sum_val_F1 += train_F1
+            test_F1 = calculateF1Measure(res.sigmoid().cpu().numpy(), gt.numpy(), 0.7)
+            sum_test_FM += test_F1
 
-        avg_val_F1_g1 = sum_val_F1 / 100
-        print("==========F1 measure is %0.4f" % (avg_val_F1_g1))
+        FM = sum_test_FM / 100
+        print("==========Fmeasure is %0.4f" % (FM))
