@@ -82,8 +82,8 @@ class test_dataset:
 
         #self.img_transform = transforms.Compose([transforms.Resize((self.trainsize, self.trainsize)), transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         self.img_transform = transforms.Compose([transforms.Resize((self.trainsize, self.trainsize)), transforms.ToTensor()])
-        #self.gt_transform = transforms.Compose([transforms.Resize((self.trainsize, self.trainsize)), transforms.ToTensor()])
-        self.gt_transform = transforms.Compose([transforms.ToTensor()])
+        self.gt_transform  = transforms.Compose([transforms.Resize((self.trainsize, self.trainsize)), transforms.ToTensor()])
+        # self.gt_transform = transforms.Compose([transforms.ToTensor()])
 
     def __getitem__(self, index):
         image = self.rgb_loader(self.images[index])
