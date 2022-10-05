@@ -1,6 +1,6 @@
 # LSPM and FAMCA
 This repository is the implement of Infrared Small Target Segmentation with Multiscale Feature Representation. The source code is built on Ubuntu18.04 with Pytorch 1.1. 
-## The illustration of the overall architecture
+## The illustration of architecture
 ![](https://github.com/HuangLian126/LSPM/blob/master/Figure1.png)
 
 
