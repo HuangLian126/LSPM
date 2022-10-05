@@ -1,5 +1,5 @@
-import torch, os, argparse
-from torch.autograd import Variable
+import torch, argparse
+
 from ourModels import model_VGG
 from data import get_loader
 from utils import clip_gradient
@@ -18,9 +18,10 @@ def parse_args():
     return opt
 
 if __name__ == '__main__':
+    device = torch.device('cuda:0')
     opt = parse_args()
     model = model_VGG()
-    model.cuda()
+    model = model.to(device)
     params = model.parameters()
 
     optimizer = torch.optim.Adam(params, opt.lr)
@@ -38,10 +39,9 @@ if __name__ == '__main__':
         for i, pack in enumerate(train_loader, start=1):
             optimizer.zero_grad()
             images, gts = pack
-            images = Variable(images)
-            gts = Variable(gts)
-            images = images.cuda()
-            gts = gts.cuda()
+            
+            images = images.to(device)
+            gts = gts.to(device)
 
             dets = model(images)
             loss = CE(dets, gts)
