@@ -4,7 +4,6 @@ import numpy as np
 import cv2
 
 from ourModels import model_VGG
-from torch.autograd import Variable
 from data import get_loader_test
 
 def parse_args():
