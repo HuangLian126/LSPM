@@ -1,4 +1,4 @@
-import torch, os, argparse
+import torch,  argparse
 import torch.nn.functional as F
 import numpy as np
 import cv2
@@ -14,11 +14,14 @@ def parse_args():
     return opt
 
 if __name__ == '__main__':
+    
+    device = torch.device('cuda:0')
+    
     opt = parse_args()
     model = model_VGG()
     model.load_state_dict(torch.load('/model path/'))
 
-    model.cuda()
+    model = model.to(device)
     model.eval()
 
     def calculateF1Measure(output_image,gt_image,thre):
@@ -52,7 +55,8 @@ if __name__ == '__main__':
             gt[gt > 0.5] = 1
             gt[gt != 1] = 0
      
-            image = image.cuda()
+            image = image.to(device)
+            
             res = model(image)
             
             img = img.sigmoid().data.cpu().numpy().squeeze()
