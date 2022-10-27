@@ -11,7 +11,7 @@ python train.py
 ```
 
 ## Citation
-If you have any questions, please contact this Email: hlcqsxxy@163.com.
+If you have any questions, please contact hlcqsxxy@163.com.
 This code is only freely available for non-commercial research use, but please contact us if for other purposes.
 
 ```latex
