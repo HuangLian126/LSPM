@@ -9,3 +9,21 @@ If you have any questions, please contact this Email: hlcqsxxy@163.com.
 Copyright: School of Communication and Information Engineering, Chongqing University of Posts and Telecommunications (CQUPT)
 
 This code is only freely available for non-commercial research use, but please contact us if for other purposes.
+
+## Training
+1. Run the following for training.
+
+```bash
+python train.py 
+```
+
+## Citation
+```latex
+@ARTICLE{huang2021,
+  author={Lian Huang, Shaosheng Dai, Tao Huang, Xiangkang Huang, Haining Wang},
+  journal={Infrared Physics and Technology}, 
+  title={Infrared small target segmentation with multiscale feature representation}, 
+  year={2021},
+  doi={10.1016/j.infrared.2021.103755}
+}
+```
