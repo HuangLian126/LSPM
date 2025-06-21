@@ -1,4 +1,6 @@
-import torch, argparse
+import torch
+import argparse
+import time
 
 from ourModels import model_VGG
 from data import get_loader
@@ -18,7 +20,7 @@ def parse_args():
     return opt
 
 if __name__ == '__main__':
-    device = torch.device('cuda:0')
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     opt = parse_args()
     model = model_VGG()
     model = model.to(device)
@@ -26,8 +28,8 @@ if __name__ == '__main__':
 
     optimizer = torch.optim.Adam(params, opt.lr)
 
-    image_root = '/path/'
-    gt_root    = '/path/'
+    image_root = '/path/to/images/'
+    gt_root    = '/path/to/groundtruths/'
 
     train_loader = get_loader(image_root, gt_root, batchsize=opt.batchsize, trainsize=opt.trainsize)
     total_step = len(train_loader)
@@ -35,6 +37,8 @@ if __name__ == '__main__':
     CE = torch.nn.BCEWithLogitsLoss()
 
     for epoch in range(1, opt.epoch+1):
+        start_time = time.time()
+
         model.train()
         for i, pack in enumerate(train_loader, start=1):
             optimizer.zero_grad()
@@ -47,14 +51,17 @@ if __name__ == '__main__':
             loss = CE(dets, gts)
 
             loss.backward()
-
             clip_gradient(optimizer, opt.clip)
             optimizer.step()
 
             if i % 200 == 0 or i == total_step:
-                print('Epoch [{:03d}/{:03d}], Step [{:04d}/{:04d}], Loss: {:0.4f}'.format(epoch, opt.epoch, i, total_step, loss.data))
+                print('Epoch [{:03d}/{:03d}], Step [{:04d}/{:04d}], Loss: {:.4f}'.format(
+                    epoch, opt.epoch, i, total_step, loss.item()))
 
-        save_path_pth = '/path/'
+        end_time = time.time()
+        epoch_duration = end_time - start_time
+        print('Epoch [{:03d}] completed in {:.2f} seconds.'.format(epoch, epoch_duration))
 
-        if (epoch) % 1 == 0:
-            torch.save(model.state_dict(), save_path_pth + 'LSPM-' + '%d' % epoch + '.pth')
+        save_path_pth = '/path/to/save/models/'
+        if epoch % 1 == 0:
+            torch.save(model.state_dict(), save_path_pth + 'LSPM-{:d}.pth'.format(epoch))
